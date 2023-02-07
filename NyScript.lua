@@ -2,8 +2,9 @@ util.keep_running()
 local scriptStartTime = util.current_time_millis()
 local version = "0.1"
 local Tree_V = 43
---[[
-    -- https://github.com/hexarobi/stand-lua-auto-updater
+local name_script = "NyScript"
+
+    --https://github.com/hexarobi/stand-lua-auto-updater
     local status, auto_updater = pcall(require, "auto-updater")
     if not status then
         local auto_update_complete = nil util.toast("Installing auto-updater...", TOAST_ALL)
@@ -26,20 +27,22 @@ local Tree_V = 43
     end
     if auto_updater == true then error("Invalid auto-updater lib. Please delete your Stand/Lua Scripts/lib/auto-updater.lua and try again") end
 
+    --- Config
     local languages = {
         'french',
         'english',
     }
 
+    --- Auto-Update
     local auto_update_config = {
-        source_url="https://raw.githubusercontent.com/NyCreamZ/NyScript/main/NyScript.lua",
+        source_url="https://raw.githubusercontent.com/NyCreamZ/"..name_script.."/main/"..name_script..".lua",
         script_relpath=SCRIPT_RELPATH,
         --silent_updates=true,
         dependencies={
             {
                 name="functions",
-                source_url="https://raw.githubusercontent.com/NyCreamZ/NyScript/main/lib/NyScript/functions.lua",
-                script_relpath="lib/NyScript/functions.lua",
+                source_url="https://raw.githubusercontent.com/NyCreamZ/"..name_script.."/main/lib/"..name_script.."/functions.lua",
+                script_relpath="lib/"..name_script.."/functions.lua",
             },
         }
     }
@@ -47,28 +50,27 @@ local Tree_V = 43
     for _, language in pairs(languages) do
         local language_config = {
             name=language,
-            source_url="https://raw.githubusercontent.com/NyCreamZ/NyScript/main/lib/NyScript/Languages/"..language..".lua",
-            script_relpath="lib/NyScript/Languages/"..language..".lua",
+            source_url="https://raw.githubusercontent.com/NyCreamZ/"..name_script.."/main/lib/"..name_script.."/Languages/"..language..".lua",
+            script_relpath="lib/"..name_script.."/Languages/"..language..".lua",
         }
         table.insert(auto_update_config.dependencies, language_config)
     end
 
     auto_updater.run_auto_update(auto_update_config)
 
-]]--
-
     local required <const> = {
     	"lib/natives-1663599433.lua",
-    	"lib/NyScript/functions.lua",
+    	"lib/"..name_script.."/functions.lua",
     }
     local scriptdir <const> = filesystem.scripts_dir()
-    local libDir <const> = scriptdir .. "\\lib\\NyScript\\"
+    local libDir <const> = scriptdir .. "\\lib\\"..name_script.."\\"
     local languagesDir <const> = libDir .. "\\Languages\\"
-    local relative_languagesDir <const> = "./lib/NyScript/Languages/"
+    local relative_languagesDir <const> = "./lib/"..name_script.."/Languages/"
 
     for _, file in ipairs(required) do
     	assert(filesystem.exists(scriptdir .. file), "required file not found: " .. file)
     end
+
     require "NyScript.functions"
     local Json = require("json")
     util.ensure_package_is_installed('lua/natives-1663599433')
@@ -86,7 +88,6 @@ local Tree_V = 43
         util.register_file(filesystem.resources_dir() .. "NyTextures.ytd")
         notification.txdDict = "NyTextures"
         notification.txdName = "logo"
-
         util.spoof_script("main_persistent", function()
             GRAPHICS.REQUEST_STREAMED_TEXTURE_DICT("NyTextures", false)
         end)
@@ -116,12 +117,11 @@ local Tree_V = 43
         end
     end
 
-
     local need_default_language
 
     if not table.contains(languageDir_files, 'english.lua') then
         need_default_language = true
-        async_http.init('raw.githubusercontent.com', 'NyCreamZ/NyScript/main/lib/NyScript/Languages/english.lua', function(data)
+        async_http.init('raw.githubusercontent.com', 'NyCreamZ/'..name_script..'/main/lib/'..name_script..'/Languages/english.lua', function(data)
             local file = io.open(translations_dir .. "/english.lua",'w')
             file:write(data)
             file:close()
@@ -146,7 +146,6 @@ local Tree_V = 43
         file:close()
     end
 
-
     local selected_lang_file = io.open(selected_lang_path, 'r')
     local selected_language = selected_lang_file:read()
     if not table.contains(languageDir_files, selected_language) then
@@ -155,7 +154,6 @@ local Tree_V = 43
     else
         Translations = require(relative_languagesDir .. '\\' .. selected_language:gsub('.lua', ''))
     end
-
 
 async_http.init('pastebin.com', '89Js2RDM', function() end)
 async_http.dispatch()
@@ -177,7 +175,7 @@ async_http.dispatch()
                     "Self>Glued To Seats",
                     "Self>Lock Wanted Level",
                     "Self>Infinite Stamina",
-                    "Soi>Appearance>No Blood",
+                    "Self>Appearance>No Blood",
                 },
             }
 
@@ -652,8 +650,4 @@ local self_root = main_root:list(Translations.self_root, {}, Translations.self_r
             settings_credits_root:readonly("WiriScript", "Notification")
             settings_credits_root:readonly("Hexarobi", "Auto-Update")
 
---===============--
--- FIN Main
---===============--
-
-util.log("NyScript loaded in %d millis", util.current_time_millis() - scriptStartTime)
+util.log(name_script.." loaded in %d millis", util.current_time_millis() - scriptStartTime)
