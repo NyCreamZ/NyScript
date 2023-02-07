@@ -2,7 +2,6 @@ util.keep_running()
 local scriptStartTime = util.current_time_millis()
 local SCRIPT_VERSION = "0.1"
 local Tree_V = 43
-local name_script = "NyScript"
 
     --https://github.com/hexarobi/stand-lua-auto-updater
     local status, auto_updater = pcall(require, "auto-updater")
@@ -27,22 +26,20 @@ local name_script = "NyScript"
     end
     if auto_updater == true then error("Invalid auto-updater lib. Please delete your Stand/Lua Scripts/lib/auto-updater.lua and try again") end
 
-    --- Config
     local languages = {
         'french',
         'english',
     }
 
-    --- Auto-Update
     local auto_update_config = {
-        source_url="https://raw.githubusercontent.com/NyCreamZ/"..name_script.."/main/"..name_script..".lua",
+        source_url="https://raw.githubusercontent.com/NyCreamZ/"..SCRIPT_NAME.."/main/"..SCRIPT_NAME..".lua",
         script_relpath=SCRIPT_RELPATH,
-        --silent_updates=true,
+        silent_updates=true,
         dependencies={
             {
                 name="functions",
-                source_url="https://raw.githubusercontent.com/NyCreamZ/"..name_script.."/main/lib/"..name_script.."/functions.lua",
-                script_relpath="lib/"..name_script.."/functions.lua",
+                source_url="https://raw.githubusercontent.com/NyCreamZ/"..SCRIPT_NAME.."/main/lib/"..SCRIPT_NAME.."/functions.lua",
+                script_relpath="lib/"..SCRIPT_NAME.."/functions.lua",
             },
         }
     }
@@ -50,8 +47,8 @@ local name_script = "NyScript"
     for _, language in pairs(languages) do
         local language_config = {
             name=language,
-            source_url="https://raw.githubusercontent.com/NyCreamZ/"..name_script.."/main/lib/"..name_script.."/Languages/"..language..".lua",
-            script_relpath="lib/"..name_script.."/Languages/"..language..".lua",
+            source_url="https://raw.githubusercontent.com/NyCreamZ/"..SCRIPT_NAME.."/main/lib/"..SCRIPT_NAME.."/Languages/"..language..".lua",
+            script_relpath="lib/"..SCRIPT_NAME.."/Languages/"..language..".lua",
         }
         table.insert(auto_update_config.dependencies, language_config)
     end
@@ -60,12 +57,12 @@ local name_script = "NyScript"
 
     local required <const> = {
     	"lib/natives-1663599433.lua",
-    	"lib/"..name_script.."/functions.lua",
+    	"lib/"..SCRIPT_NAME.."/functions.lua",
     }
     local scriptdir <const> = filesystem.scripts_dir()
-    local libDir <const> = scriptdir .. "\\lib\\"..name_script.."\\"
+    local libDir <const> = scriptdir .. "\\lib\\"..SCRIPT_NAME.."\\"
     local languagesDir <const> = libDir .. "\\Languages\\"
-    local relative_languagesDir <const> = "./lib/"..name_script.."/Languages/"
+    local relative_languagesDir <const> = "./lib/"..SCRIPT_NAME.."/Languages/"
 
     for _, file in ipairs(required) do
     	assert(filesystem.exists(scriptdir .. file), "required file not found: " .. file)
@@ -121,7 +118,7 @@ local name_script = "NyScript"
 
     if not table.contains(languageDir_files, 'english.lua') then
         need_default_language = true
-        async_http.init('raw.githubusercontent.com', 'NyCreamZ/'..name_script..'/main/lib/'..name_script..'/Languages/english.lua', function(data)
+        async_http.init('raw.githubusercontent.com', 'NyCreamZ/'..SCRIPT_NAME..'/main/lib/'..SCRIPT_NAME..'/Languages/english.lua', function(data)
             local file = io.open(translations_dir .. "/english.lua",'w')
             file:write(data)
             file:close()
@@ -550,7 +547,7 @@ local self_root = main_root:list(Translations.self_root, {}, Translations.self_r
                     "Online>Protections>Events>Raw Network Events>REQUEST_DETACHMENT_EVENT",
                     "Online>Protections>Events>Raw Network Events>KICK_VOTES_EVENT",
                     "Online>Protections>Events>Raw Network Events>GIVE_PICKUP_REWARDS_EVENT",
-                    
+
                     "Online>Protections>Events>Raw Network Events>BLOW_UP_VEHICLE_EVENT",
                     "Online>Protections>Events>Raw Network Events>NETWORK_SPECIAL_FIRE_EQUIPPED_WEAPON",
                     "Online>Protections>Events>Raw Network Events>NETWORK_RESPONDED_TO_THREAT_EVENT",
@@ -562,12 +559,12 @@ local self_root = main_root:list(Translations.self_root, {}, Translations.self_r
                     "Online>Protections>Events>Raw Network Events>PTFX",
                     "Online>Protections>Events>Raw Network Events>NETWORK_PED_SEEN_DEAD_PED_EVENT",
                     "Online>Protections>Events>Raw Network Events>REMOVE_STICKY_BOMB_EVENT",
-                    
+
                     "Online>Protections>Events>Raw Network Events>INFORM_SILENCED_GUNSHOT_EVENT",
                     "Online>Protections>Events>Raw Network Events>PED_PLAY_PAIN_EVENT",
                     "Online>Protections>Events>Raw Network Events>CACHE_PLAYER_HEAD_BLEND_DATA_EVENT",
                     "Online>Protections>Events>Raw Network Events>REMOVE_PED_FROM_PEDGROUP_EVENT",
-                    
+
                     "Online>Protections>Events>Raw Network Events>REPORT_CASH_SPAWN_EVENT",
                     "Online>Protections>Events>Raw Network Events>ACTIVATE_VEHICLE_SPECIAL_ABILITY_EVENT",
                     "Online>Protections>Events>Raw Network Events>BLOCK_WEAPON_SELECTION",
@@ -650,4 +647,4 @@ local self_root = main_root:list(Translations.self_root, {}, Translations.self_r
             settings_credits_root:readonly("WiriScript", "Notification")
             settings_credits_root:readonly("Hexarobi", "Auto-Update")
 
-util.log(name_script.." loaded in %d millis", util.current_time_millis() - scriptStartTime)
+util.log(SCRIPT_NAME.." loaded in %d millis", util.current_time_millis() - scriptStartTime)
