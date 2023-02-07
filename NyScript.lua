@@ -1,6 +1,6 @@
 util.keep_running()
 local scriptStartTime = util.current_time_millis()
-local version = "0.1"
+local SCRIPT_VERSION = "0.1"
 local Tree_V = 43
 local name_script = "NyScript"
 
