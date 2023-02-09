@@ -623,7 +623,7 @@ local self_root = main_root:list(Translations.self_root, {}, Translations.self_r
                 if on then
                     protections_value.mission[path..">Block"] = menu.ref_by_path(path..">Block", Tree_V).value
                     menu.ref_by_path(path..">Block", Tree_V):applyDefaultState()
-                elseif menu.ref_by_path(path..">Block", Tree_V).value == menu.ref_by_path(path..">Block", Tree_V):getDefaultState() then
+                elseif menu.ref_by_path(path..">Block", Tree_V).value ~= menu.ref_by_path(path..">Block", Tree_V):getDefaultState() then
                     SetPathVal(path..">Block", protections_value.mission[path..">Block"])
                 end
             end
